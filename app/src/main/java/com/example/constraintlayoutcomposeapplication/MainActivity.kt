@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.modifier.modifierLocalProvider
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -156,10 +155,26 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
+@Composable
+fun GuidelineExample() {
+    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
+        val (text1) = createRefs()
+        val createGuidelineTop = createGuidelineFromTop(40.dp)
+        Text(
+            text = "Some Contents...",
+            modifier = Modifier.constrainAs(text1) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(createGuidelineTop)
+            }
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ConstraintLayoutComposeApplicationTheme {
-        LoginWithConstraintLayout()
+        GuidelineExample()
     }
 }
