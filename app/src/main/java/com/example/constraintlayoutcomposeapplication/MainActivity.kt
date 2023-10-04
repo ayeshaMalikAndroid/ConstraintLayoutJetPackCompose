@@ -4,10 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -171,10 +168,41 @@ fun GuidelineExample() {
     }
 }
 
+@Composable
+fun CreateBarrierExample() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(30.dp)
+    ) {
+        val (t1, t2, t3) = createRefs()
+        val barrierEnd = createEndBarrier(t1,t2)
+        Text(text = "First text content",
+            modifier = Modifier.constrainAs(t1) {
+                start.linkTo(parent.start)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
+
+            })
+        Text(text = "Second text content ",
+            modifier = Modifier.constrainAs(t2) {
+                start.linkTo(parent.start)
+                top.linkTo(t1.bottom)
+            })
+        Text(text = "Third text content",
+            modifier = Modifier.constrainAs(t3) {
+                start.linkTo(barrierEnd)
+                top.linkTo(t1.bottom)
+            })
+    }
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ConstraintLayoutComposeApplicationTheme {
-        GuidelineExample()
+        CreateBarrierExample()
+
     }
 }
