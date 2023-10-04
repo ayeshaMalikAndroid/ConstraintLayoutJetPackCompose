@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -152,6 +153,7 @@ fun Greeting(name: String) {
     Text(text = "Hello $name!")
 }
 
+//Guideline in Constraint
 @Composable
 fun GuidelineExample() {
     ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
@@ -168,6 +170,7 @@ fun GuidelineExample() {
     }
 }
 
+//Barrier in Constraint
 @Composable
 fun CreateBarrierExample() {
     ConstraintLayout(
@@ -176,7 +179,7 @@ fun CreateBarrierExample() {
             .padding(30.dp)
     ) {
         val (t1, t2, t3) = createRefs()
-        val barrierEnd = createEndBarrier(t1,t2)
+        val barrierEnd = createEndBarrier(t1, t2)
         Text(text = "First text content",
             modifier = Modifier.constrainAs(t1) {
                 start.linkTo(parent.start)
@@ -198,11 +201,40 @@ fun CreateBarrierExample() {
 }
 
 
+//Chain in Constraint
+@Composable
+fun CreateChainsExample() {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp)
+    ) {
+
+        val (textOne, textTwo, textThree) = createRefs()
+createHorizontalChain(textOne,textTwo,textThree)
+        Text(text = "Text One", modifier = Modifier.constrainAs(textOne) {
+            start.linkTo(parent.start)
+            top.linkTo(parent.top)
+
+        })
+        Text(text = "Text Two", modifier = Modifier.constrainAs(textTwo) {
+            start.linkTo(textOne.end, margin = 8.dp)
+            top.linkTo(textOne.top)
+            bottom.linkTo(textOne.bottom)
+        })
+        Text(text = "Text Three", modifier = Modifier.constrainAs(textThree) {
+            start.linkTo(textTwo.end, margin = 8.dp)
+            top.linkTo(textTwo.top)
+            bottom.linkTo(textTwo.bottom)
+        })
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ConstraintLayoutComposeApplicationTheme {
-        CreateBarrierExample()
+        CreateChainsExample()
 
     }
 }
